@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>Scratch Card</title>
+<style>
+body{
+  margin:0;
+  height:100vh;
+  display:flex;
+  justify-content:center;
+  align-items:center;
+  background:linear-gradient(135deg,#ffd6e0,#fff);
+  font-family:sans-serif;
+}
+
+.card{
+  width:320px;
+  height:220px;
+  position:relative;
+  border-radius:20px;
+  overflow:hidden;
+  box-shadow:0 10px 25px rgba(0,0,0,0.2);
+}
+
+.msg{
+  width:100%;
+  height:100%;
+  background:white;
+  display:flex;
+  flex-direction:column;
+  justify-content:center;
+  align-items:center;
+  text-align:center;
+  padding:20px;
+  font-size:18px;
+}
+
+canvas{
+  position:absolute;
+  top:0;
+  left:0;
+}
+</style>
+</head>
+
+<body>
+
+<div class="card">
+  <div class="msg">
+    💌 Surprise 💌<br><br>
+    ඔයා අද හරිම special කෙනෙක් ❤️<br>
+    Scratch කරලා බලන්න ✨
+  </div>
+  <canvas id="c"></canvas>
+</div>
+
+<script>
+let c=document.getElementById("c");
+let ctx=c.getContext("2d");
+
+c.width=320;
+c.height=220;
+
+// cover
+ctx.fillStyle="#999";
+ctx.fillRect(0,0,c.width,c.height);
+
+ctx.globalCompositeOperation="destination-out";
+
+let draw=false;
+
+function scratch(x,y){
+  ctx.beginPath();
+  ctx.arc(x,y,22,0,Math.PI*2);
+  ctx.fill();
+}
+
+c.addEventListener("mousedown",()=>draw=true);
+c.addEventListener("mouseup",()=>draw=false);
+c.addEventListener("mousemove",(e)=>{
+  if(!draw) return;
+  let r=c.getBoundingClientRect();
+  scratch(e.clientX-r.left,e.clientY-r.top);
+});
+
+c.addEventListener("touchmove",(e)=>{
+  let r=c.getBoundingClientRect();
+  let t=e.touches[0];
+  scratch(t.clientX-r.left,t.clientY-r.top);
+});
+</script>
+
+</body>
+</html>
